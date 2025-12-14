@@ -1,6 +1,7 @@
 package com.product.products.infrastructure.web.controller;
 
 import com.product.products.application.dto.StockUpdateRequestDTO;
+import com.product.products.infrastructure.validation.ValidCategory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -216,8 +217,35 @@ public class ProductController {
     /**
      * GET /api/v1/products/search?lastName={lastName}
      * Recherche des produits par nom
-     * 
+     *
      * @param name Le nom à rechercher
+     * @return Liste des produits correspondants
+     */
+    @Operation(summary = "Rechercher des produits par nom",
+            description = "Recherche des produits dont le nom contient la chaîne spécifiée")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Recherche effectuée avec succès",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ProductResponseDTO.class)))
+    })
+    @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ProductResponseDTO>> searchProducts(
+            @Parameter(description = "Nom de famille à rechercher", required = true)
+            @RequestParam String name) {
+
+        log.info("GET /api/v1/products/search?name={} - Recherche de produits", name);
+
+        List<ProductResponseDTO> products = productService.searchProductsByName(name);
+
+        return ResponseEntity.ok(products);
+    }
+
+    /**
+     * GET /api/v1/products/search?lastName={lastName}
+     * Recherche des produits par nom
+     * 
+     * @param category Le nom à rechercher
      * @return Liste des produits correspondants
      */
     @Operation(summary = "Rechercher des produits par nom", 
@@ -228,14 +256,14 @@ public class ProductController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = ProductResponseDTO.class)))
     })
-    @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ProductResponseDTO>> searchProducts(
-            @Parameter(description = "Nom de famille à rechercher", required = true)
-            @RequestParam String name) {
+    @GetMapping(value = "/category/{category}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ProductResponseDTO>> filterByCategory(
+            @Parameter(description = "categorie à rechercher", required = true)
+            @PathVariable @Valid String category) {
         
-        log.info("GET /api/v1/products/search?name={} - Recherche de produits", name);
+        log.info("GET /api/v1/products/category/{} - Recherche de produits par category", category);
         
-        List<ProductResponseDTO> products = productService.searchProductsByName(name);
+        List<ProductResponseDTO> products = productService.searchProductsByCategory(category);
         
         return ResponseEntity.ok(products);
     }

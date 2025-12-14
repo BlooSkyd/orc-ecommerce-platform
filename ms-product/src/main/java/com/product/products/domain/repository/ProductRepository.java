@@ -1,5 +1,6 @@
 package com.product.products.domain.repository;
 
+import com.product.products.domain.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -34,7 +35,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     /**
      * Recherche les produits par categorie
      */
-    List<Product> searchByCategory(String category);
+    List<Product> findByCategory(Category category);
 
 
     /**

@@ -1,7 +1,7 @@
 package com.order.orders.infrastructure.web.controller;
 
 import com.order.orders.application.dto.*;
-import com.order.orders.domain.entity.OrderStatus;
+import com.product.products.infrastructure.validation.ValidCategory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -262,11 +262,11 @@ public class OrderController {
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                     schema = @Schema(implementation = OrderResponseDTO.class))),
         @ApiResponse(responseCode = "404",
-                    description = "Utilisateur non trouvé",
+                    description = "Statut non trouvé",
                     content = @Content)
     })
     @GetMapping(value = "/status/{status}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<OrderResponseDTO>> changeOrderStock(
+    public ResponseEntity<List<OrderResponseDTO>> filterOrderByStatus(
             @Parameter(description = "statut des commandes", required = true)
             @PathVariable @Valid String status) {
 

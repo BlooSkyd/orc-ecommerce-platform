@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class StockUpdateRequestDTO {
     @NotNull(message = "Le stock ne peut être nul")
-    private Integer stockModification;
+    private int stockModification;
 }

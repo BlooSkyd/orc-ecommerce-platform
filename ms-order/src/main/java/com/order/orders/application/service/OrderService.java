@@ -162,29 +162,30 @@ public class OrderService {
         orderRepository.save(order); // Sauvegarder afin d'avoir un id
 
         for (OrderItemRequestDTO itemRequestDTO : orderRequestDTO.getItems()) {
-            ProductResponseDTO productResponseDTO = productServiceWebClient.get()
-                    .uri(MS_PRODUCT_BASE_URL +"/"+itemRequestDTO.getProductId())
-                    .retrieve()
-                    .bodyToMono(ProductResponseDTO.class)
-                    .block();
-
-            assert productResponseDTO != null;
-            OrderItem orderItem = orderItemMapper.toEntity(itemRequestDTO, productResponseDTO, order.getId());
-            orderItemRepository.save(orderItem);
-            // Méthode custom qui ajoute l'item à la commande et addition son sous total
-            order.addItem(orderItem);
-
-            // 4. Mise à jour des stocks
-            StockUpdateRequestDTO stockUpdateRequestDTO = new StockUpdateRequestDTO();
-            stockUpdateRequestDTO.setStockModification(itemRequestDTO.getQuantity()*-1);
             try {
+                ProductResponseDTO productResponseDTO = productServiceWebClient.get()
+                        .uri(MS_PRODUCT_BASE_URL +"/"+itemRequestDTO.getProductId())
+                        .retrieve()
+                        .bodyToMono(ProductResponseDTO.class)
+                        .block();
+
+                assert productResponseDTO != null;
+                OrderItem orderItem = orderItemMapper.toEntity(itemRequestDTO, productResponseDTO, order.getId());
+                orderItemRepository.save(orderItem);
+                // Méthode custom qui ajoute l'item à la commande et addition son sous total
+                order.addItem(orderItem);
+
+                // 4. Mise à jour des stocks
+                StockUpdateRequestDTO stockUpdateRequestDTO = new StockUpdateRequestDTO();
+                stockUpdateRequestDTO.setStockModification(itemRequestDTO.getQuantity()*-1);
+
                 productServiceWebClient.patch()
                         .uri(MS_PRODUCT_BASE_URL +"/"+itemRequestDTO.getProductId()+"/stock")
                         .bodyValue(stockUpdateRequestDTO)
                         .retrieve().toBodilessEntity().block();
             } catch (WebClientRequestException e) {
                 order.setStatus(OrderStatus.CANCELLED);
-                throw new ExternalServiceException("Le service utilisateur est indisponible.");
+                throw new ExternalServiceException("Le service produit est indisponible.");
             }
 
         }

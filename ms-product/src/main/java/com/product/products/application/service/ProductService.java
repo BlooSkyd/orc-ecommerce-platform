@@ -1,5 +1,6 @@
 package com.product.products.application.service;
 
+import com.product.products.domain.entity.Category;
 import com.product.products.infrastructure.exception.FieldValueException;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -83,7 +84,8 @@ public class ProductService {
         Product savedProduct = productRepository.save(product);
         
         // Métrique personnalisée
-        Counter.builder("products.created")
+        String counterName = "products.created."+product.getCategory().toString().toLowerCase();
+        Counter.builder(counterName)
                 .description("Nombre de produits créés")
                 .tag("type", "product")
                 .register(meterRegistry)
@@ -103,17 +105,20 @@ public class ProductService {
         
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
-        
-                
+
+        String counterName = "products.created."+product.getCategory().toString().toLowerCase();
+        Counter.builder(counterName)
+                .register(meterRegistry)
+                .increment(-1);
+
         productMapper.updateEntityFromDto(productRequestDTO, product);
         Product updatedProduct = productRepository.save(product);
         
         // Métrique personnalisée
-        Counter.builder("products.updated")
-                .description("Nombre de produits mis à jour")
-                .tag("type", "product")
+        String counterUpdateName = "products.created."+updatedProduct.getCategory().toString().toLowerCase();
+        Counter.builder(counterUpdateName)
                 .register(meterRegistry)
-                .increment();
+                .increment(1);
         
         log.info("Produit mis à jour avec succès: ID={}, Name={}", 
                 updatedProduct.getId(), updatedProduct.getName());
@@ -134,11 +139,10 @@ public class ProductService {
         productRepository.delete(product);
         
         // Métrique personnalisée
-        Counter.builder("products.deleted")
-                .description("Nombre de produits supprimés")
-                .tag("type", "product")
+        String counterName = "products.created."+product.getCategory().toString().toLowerCase();
+        Counter.builder(counterName)
                 .register(meterRegistry)
-                .increment();
+                .increment(-1);
         
         log.info("Produit supprimé avec succès: ID={}, Name={}", id, product.getName());
     }
@@ -164,7 +168,7 @@ public class ProductService {
     public List<ProductResponseDTO> searchProductsByCategory(String category) {
         log.debug("Recherche de produits avec la catégorie: {}", category);
 
-        List<Product> products = productRepository.searchByCategory(category);
+        List<Product> products = productRepository.findByCategory(Category.valueOf(category));
 
         log.info("Nombre de produits trouvés: {}", products.size());
 
