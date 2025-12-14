@@ -30,17 +30,17 @@ public class Order {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "order_date", updatable = false)
+    @Column(name = "order_date")
     private LocalDateTime orderDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM('ELECTRONICS', 'BOOKS', 'FOOD', 'OTHER')", name = "status", nullable = false)
+    @Column(columnDefinition = "ENUM('PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED')", name = "status", nullable = false)
     private OrderStatus status;
 
-    @Column(name = "total_amount", nullable = false)
+    @Column(name = "total_amount")
     @Positive(message = "Le sous total doit être positif")
     @Digits(integer = 10, fraction = 2, message = "Le sous total doit avoir au plus 10 chiffres avant la virgule, et maximum 2 après la virgule")
-    private BigDecimal totalAmount;
+    private BigDecimal totalAmount = java.math.BigDecimal.ZERO;
 
     @Column(name = "shipping_address")
     private String shippingAddress;
@@ -54,10 +54,13 @@ public class Order {
     private LocalDateTime updatedAt;
 
     @Transient
-    private ArrayList<OrderItem> items;
+    private ArrayList<OrderItem> items = new ArrayList<>();
 
     public void addItem(OrderItem item) {
-        this.totalAmount.add(item.getSubtotal());
+        if (item == null) return;
+        if (this.totalAmount == null) this.totalAmount = java.math.BigDecimal.ZERO;
+        this.totalAmount = this.totalAmount.add(item.getSubtotal() != null ? item.getSubtotal() : java.math.BigDecimal.ZERO);
+        if (items == null) items = new ArrayList<>();
         this.items.add(item);
     }
 

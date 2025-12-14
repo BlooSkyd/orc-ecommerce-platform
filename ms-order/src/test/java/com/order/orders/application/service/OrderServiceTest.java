@@ -82,7 +82,6 @@ class OrderServiceTest {
 		OrderResponseDTO dto = results.get(0);
 		assertThat(dto.getId()).isEqualTo(1L);
 		assertThat(dto.getUserId()).isEqualTo(42L);
-		assertThat(dto.getItemAmount()).isEqualTo(1);
 		assertThat(dto.getShippingAddress()).isEqualTo("123 Main Street, City");
 	}
 }

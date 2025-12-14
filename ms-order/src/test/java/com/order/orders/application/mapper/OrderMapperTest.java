@@ -62,7 +62,7 @@ class OrderMapperTest {
         assertThat(dto.getId()).isEqualTo(1L);
         assertThat(dto.getUserId()).isEqualTo(9L);
         assertThat(dto.getTotalAmount()).isEqualTo(new BigDecimal("2.50"));
-        assertThat(dto.getItemAmount()).isEqualTo(1);
+        
 
         OrderItemResponseDTO itemDto = OrderItemResponseDTO.builder()
                 .id(item.getId())

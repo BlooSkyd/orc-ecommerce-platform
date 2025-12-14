@@ -1,7 +1,7 @@
 
 spring:
   application:
-    name: products
+    name: orders
     version: 1.0.0
 
   # Configuration H2 Database
@@ -22,7 +22,7 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -130,9 +130,10 @@ logging:
     com.users: DEBUG
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    # org.hibernate.type.descriptor.sql.BasicBinder: TRACE # Afficher les valeurs dans l'insertion SQL
+    org.hibernate.orm.jdbc.bind: TRACE
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [orders] - %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} [${spring.application.name}] - %logger{36} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 
 service:

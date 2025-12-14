@@ -25,5 +25,4 @@ public class OrderResponseDTO {
     private String shippingAddress;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private int itemAmount;
 }

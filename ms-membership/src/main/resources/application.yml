@@ -11,12 +11,18 @@ spring:
     username: sa
     password: 
   
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+  
 # Configuration JPA
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -126,6 +132,6 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} [users] - %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} [${spring.application.name}] - %logger{36} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 

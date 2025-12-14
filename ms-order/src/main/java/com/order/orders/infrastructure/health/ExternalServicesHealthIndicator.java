@@ -1,9 +1,11 @@
 package com.order.orders.infrastructure.health;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * Health Indicator personnalisé pour vérifier les services externes.
@@ -11,25 +13,31 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class ExternalServicesHealthIndicator implements HealthIndicator {
+
+    private final WebClient productServiceWebClient;
+    private final WebClient userServiceWebClient;
+
+    private final String healthEndpoint = "actuator/health";
 
     @Override
     public Health health() {
         try {
             // Simulation d'un check de service externe
             // Dans un cas réel, vous feriez un appel HTTP, une connexion à un service, etc.
-            boolean emailServiceUp = checkEmailService();
-            boolean notificationServiceUp = checkNotificationService();
+            boolean isUserServiceUp = checkUserService();
+            boolean isProductServiceUp = checkProductService();
             
-            if (emailServiceUp && notificationServiceUp) {
+            if (isUserServiceUp && isProductServiceUp) {
                 return Health.up()
-                        .withDetail("emailService", "UP")
-                        .withDetail("notificationService", "UP")
+                        .withDetail("userService", "UP")
+                        .withDetail("productService", "UP")
                         .build();
             } else {
                 return Health.down()
-                        .withDetail("emailService", emailServiceUp ? "UP" : "DOWN")
-                        .withDetail("notificationService", notificationServiceUp ? "UP" : "DOWN")
+                        .withDetail("userService", isUserServiceUp ? "UP" : "DOWN")
+                        .withDetail("productService", isProductServiceUp ? "UP" : "DOWN")
                         .build();
             }
             
@@ -41,15 +49,27 @@ public class ExternalServicesHealthIndicator implements HealthIndicator {
         }
     }
 
-    private boolean checkEmailService() {
-        // Simulation - retourne toujours true
-        // Dans un cas réel, vérifier la connexion au serveur SMTP
-        return true;
+    private boolean checkUserService() {
+        return Boolean.TRUE.equals(
+                userServiceWebClient.get()
+                        .uri(healthEndpoint)
+                        .retrieve()
+                        .toBodilessEntity()
+                        .map(response -> response.getStatusCode().is2xxSuccessful())
+                        .onErrorReturn(false)
+                        .block()
+        );
     }
 
-    private boolean checkNotificationService() {
-        // Simulation - retourne toujours true
-        // Dans un cas réel, faire un ping vers le service de notifications
-        return true;
+    private boolean checkProductService() {
+        return Boolean.TRUE.equals(
+                productServiceWebClient.get()
+                        .uri(healthEndpoint)
+                        .retrieve()
+                        .toBodilessEntity()
+                        .map(response -> response.getStatusCode().is2xxSuccessful())
+                        .onErrorReturn(false)
+                        .block()
+        );
     }
 }

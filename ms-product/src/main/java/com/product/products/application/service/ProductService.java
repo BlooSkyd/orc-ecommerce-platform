@@ -203,6 +203,7 @@ public class ProductService {
             throw new FieldValueException("Product","stock", product.getStock()+stock, "le nouveau stock doit être positif ou nul");
         }
 
+        int oldStock = product.getStock();
         product.setStock(product.getStock()+stock);
         Product updatedProduct = productRepository.save(product);
 
@@ -213,8 +214,8 @@ public class ProductService {
                 .register(meterRegistry)
                 .increment();
 
-        log.info("Produit mis à jour avec succès: ID={}, Name={}",
-                updatedProduct.getId(), updatedProduct.getName());
+        log.info("Stock produit mis à jour avec succès: ID={}, Name={}, Ancien stock={}, Nouveau stock={}",
+                updatedProduct.getId(), updatedProduct.getName(), oldStock, product.getStock());
 
         return productMapper.toDto(updatedProduct);
     }

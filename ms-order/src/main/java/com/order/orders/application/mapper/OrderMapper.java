@@ -44,7 +44,6 @@ public class OrderMapper {
                 .shippingAddress(order.getShippingAddress())
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())
-                .itemAmount(order.getItems().size())
                 .build();
     }
 
@@ -54,6 +53,7 @@ public class OrderMapper {
                 .userId(order.getUserId())
                 .orderDate(order.getOrderDate())
                 .orderStatus(order.getOrderStatus())
+                .totalAmount(order.getTotalAmount())
                 .shippingAddress(order.getShippingAddress())
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())

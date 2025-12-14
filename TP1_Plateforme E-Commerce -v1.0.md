@@ -107,15 +107,15 @@ Vous êtes une équipe de développement chargée de créer une **plateforme e-c
 
 #### Endpoints REST à implémenter
 
-| Méthode | Endpoint | Description | Service | Controller |
-|---------|----------|-------------|---------|------------|
-| GET | `/api/v1/orders` | Liste toutes les commandes | OK      | OK         |
-| GET | `/api/v1/orders/{id}` | Détail d'une commande | OK      | OK         |
-| POST | `/api/v1/orders` | Créer une commande | OK      | OK         |
-| PUT | `/api/v1/orders/{id}/status` | Changer le statut | OK      | OK         |
-| DELETE | `/api/v1/orders/{id}` | Annuler une commande | OK      | OK         |
-| GET | `/api/v1/orders/user/{userId}` | Commandes d'un utilisateur | OK      | OK         |
-| GET | `/api/v1/orders/status/{status}` | Filtrer par statut | OK      | OK         |
+| Méthode | Endpoint | Description | Service | Controller | Testé |
+|---------|----------|-------------|---------|------------|-------|
+| GET | `/api/v1/orders` | Liste toutes les commandes | OK      | OK         | OK    |
+| GET | `/api/v1/orders/{id}` | Détail d'une commande | OK      | OK         | OK    |
+| POST | `/api/v1/orders` | Créer une commande | OK      | OK         | OK    |
+| PUT | `/api/v1/orders/{id}/status` | Changer le statut | OK      | OK         |       |
+| DELETE | `/api/v1/orders/{id}` | Annuler une commande | OK      | OK         |       |
+| GET | `/api/v1/orders/user/{userId}` | Commandes d'un utilisateur | OK      | OK         |       |
+| GET | `/api/v1/orders/status/{status}` | Filtrer par statut | OK      | OK         |       |
 
 #### Fonctionnalités spécifiques
 

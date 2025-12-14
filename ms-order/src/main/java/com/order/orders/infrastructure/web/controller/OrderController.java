@@ -118,6 +118,9 @@ public class OrderController {
                     content = @Content),
         @ApiResponse(responseCode = "409", 
                     description = "Le commande existe déjà",
+                    content = @Content),
+        @ApiResponse(responseCode = "412",
+                    description = "Stock insuffisant",
                     content = @Content)
     })
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, 
@@ -167,9 +170,12 @@ public class OrderController {
                     content = @Content),
         @ApiResponse(responseCode = "409", 
                     description = "Conflit avec un commande existant",
+                    content = @Content),
+        @ApiResponse(responseCode = "412",
+                    description = "Status demandé incorrect",
                     content = @Content)
     })
-    @PutMapping(value = "/{id}", 
+    @PutMapping(value = "/{id}/status",
                 consumes = MediaType.APPLICATION_JSON_VALUE, 
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OrderResponseDTO> updateOrderStatus(

@@ -111,8 +111,8 @@ public class OrderService {
         OrderDetailsResponseDTO orderDetailsResponseDTO = orderMapper.toDetailsDto(orderResponseDTO, itemsDTOList);
 
 
-        log.info("Commande trouvée: ID={}, UserId={}, CreationDate={}, TotalPrice={}, itemAmount={}", order.getId(),
-                order.getUserId(), order.getCreatedAt(), order.getTotalAmount(), order.getItems().size());
+        log.info("Commande trouvée: ID={}, UserId={}, CreationDate={}, TotalPrice={}, itemAmount={}", orderDetailsResponseDTO.getId(),
+                orderDetailsResponseDTO.getUserId(), orderDetailsResponseDTO.getCreatedAt(), orderDetailsResponseDTO.getTotalAmount(), orderDetailsResponseDTO.getOrderItems().size());
         
         return orderDetailsResponseDTO;
     }
@@ -127,7 +127,7 @@ public class OrderService {
         // Vérifications préliminaires
         // 1. Vérif User
         try {
-            userServiceWebClient.get().uri("/{id}", orderRequestDTO.getUserId())
+            userServiceWebClient.get().uri(MS_USER_BASE_URL +"/"+orderRequestDTO.getUserId())
                     .retrieve().toBodilessEntity().block();
         } catch (WebClientResponseException.NotFound e) {
             throw new ResourceNotFoundException("Utilisateur introuvable ID: " + orderRequestDTO.getUserId());
@@ -139,7 +139,7 @@ public class OrderService {
         for (OrderItemRequestDTO item : orderRequestDTO.getItems()) {
             try {
                 ProductResponseDTO product = productServiceWebClient.get()
-                        .uri("/{id}", item.getProductId())
+                        .uri(MS_PRODUCT_BASE_URL+"/"+item.getProductId())
                         .retrieve().bodyToMono(ProductResponseDTO.class).block();
 
                 if (product == null) throw new ResourceNotFoundException("Produit vide ID: " + item.getProductId());
@@ -170,12 +170,13 @@ public class OrderService {
 
             assert productResponseDTO != null;
             OrderItem orderItem = orderItemMapper.toEntity(itemRequestDTO, productResponseDTO, order.getId());
+            orderItemRepository.save(orderItem);
             // Méthode custom qui ajoute l'item à la commande et addition son sous total
             order.addItem(orderItem);
 
             // 4. Mise à jour des stocks
             StockUpdateRequestDTO stockUpdateRequestDTO = new StockUpdateRequestDTO();
-            stockUpdateRequestDTO.setStockModification(itemRequestDTO.getQuantity());
+            stockUpdateRequestDTO.setStockModification(itemRequestDTO.getQuantity()*-1);
             try {
                 productServiceWebClient.patch()
                         .uri(MS_PRODUCT_BASE_URL +"/"+itemRequestDTO.getProductId()+"/stock")
@@ -231,6 +232,7 @@ public class OrderService {
 
         if (order.getStatus() == OrderStatus.PENDING &&
                 OrderStatus.valueOf(orderStatusRequestDTO.getStatus()) != OrderStatus.CANCELLED) {
+            log.info("Nouvelle commande confirmée de la journée, cumule du montant généré");
             order.setOrderDate(LocalDateTime.now());
 
             // Maj du métric du montant généré ajd
@@ -240,8 +242,11 @@ public class OrderService {
         // Si la date de création (ie confirmation ou +) de la commande est aujourd'hui
         // et qu'on souhaite annuler la commande, il faut soustraire au bilan du jour
         // Rem: le champ orderDate est modifié seulement si la commande change d'état depuis PENDING
-        if (order.getOrderDate().toLocalDate().isEqual(LocalDate.now()) &&
-                OrderStatus.valueOf(orderStatusRequestDTO.getStatus()) == OrderStatus.CANCELLED) {
+        if (
+                OrderStatus.valueOf(orderStatusRequestDTO.getStatus()) == OrderStatus.CANCELLED &&
+                order.getStatus() != OrderStatus.PENDING &&
+                order.getOrderDate().toLocalDate().isEqual(LocalDate.now())
+        ) {
 
             // Maj du métric du montant généré ajd
             dailyTotal.add(order.getTotalAmount().doubleValue() * -1.0);
@@ -254,6 +259,8 @@ public class OrderService {
 
         order.setStatus(OrderStatus.valueOf(orderStatusRequestDTO.getStatus()));
         orderRepository.saveAndFlush(order);
+
+        log.info(order.toString());
 
         // Métrique personnalisée
         String counterNameNewStatus = "orders."+order.getStatus().toString().toLowerCase();

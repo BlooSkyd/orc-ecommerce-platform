@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME) // Doit être disponible à l'exécution
 public @interface ValidStatus {
 
-    String message() default "La catégorie n'est pas valide. Les catégories permises sont: ELECTRONICS, BOOKS, FOOD, OTHER";
+    String message() default "Le statut n'est pas valide. Les statuts permises sont: PENDING, CONFIRMED, SHIPPED, DELIVERED et CANCELLED (avec 2 L ^^ ).";
 
     Class<?>[] groups() default {};
 
