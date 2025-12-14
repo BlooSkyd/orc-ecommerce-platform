@@ -276,4 +276,32 @@ public class OrderController {
         
         return ResponseEntity.ok(orders);
     }
+
+    /**
+     * GET /api/v1/orders/product/{id}
+     * Vérifie la présence d'un produit dans toutes les commandes
+     *
+     * @param id Le statut des commandes
+     * @return Les commandes avec le statut demandé
+     */
+    @Operation(summary = "Recherche la présence d'un produit",
+            description = "Vérifie dans toutes les commandes si le produit fournit est présent")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Utilisateur désactivé avec succès",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OrderResponseDTO.class))),
+            @ApiResponse(responseCode = "404",
+                    description = "Produit non trouvé",
+                    content = @Content)
+    })
+    @GetMapping(value = "/product/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> filterOrderByStatus(
+            @Parameter(description = "id du produit", required = true)
+            @PathVariable Long id) {
+
+        log.info("PATCH /api/v1/orders/product/{} - Recherche de produit", id);
+
+        return orderService.searchProductPresence(id);
+    }
+
 }

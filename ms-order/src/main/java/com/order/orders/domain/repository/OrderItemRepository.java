@@ -21,5 +21,10 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
      */
     List<OrderItem> searchByOrderId(Long orderId);
 
+    /**
+     * Vérifie si au moins un OrderItem fait référence au produit donné
+     */
+    boolean existsByProductId(Long productId);
+
 
 }

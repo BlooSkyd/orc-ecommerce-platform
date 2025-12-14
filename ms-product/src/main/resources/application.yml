@@ -135,3 +135,7 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} [${spring.application.name}] - %logger{36} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
 
+service:
+  order:
+    url: "http://localhost:8083/"
+

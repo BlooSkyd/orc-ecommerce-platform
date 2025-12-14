@@ -1,6 +1,8 @@
 package com.product.products.application.service;
 
 import com.product.products.domain.entity.Category;
+import com.product.products.infrastructure.exception.ExternalServiceException;
+import com.product.products.infrastructure.exception.ExternalUsageException;
 import com.product.products.infrastructure.exception.FieldValueException;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -15,9 +17,14 @@ import com.product.products.application.mapper.ProductMapper;
 import com.product.products.domain.entity.Product;
 import com.product.products.domain.repository.ProductRepository;
 import com.product.products.infrastructure.exception.ResourceNotFoundException;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.product.products.configuration.WebClientConfig.MS_ORDER_BASE_URL;
 
 /**
  * Service pour la gestion des produits.
@@ -37,6 +44,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final MeterRegistry meterRegistry;
+
+    private final WebClient orderServiceWebClient;
 
     /**
      * Récupère tous les produits
@@ -86,7 +95,7 @@ public class ProductService {
         // Métrique personnalisée
         String counterName = "products.created."+product.getCategory().toString().toLowerCase();
         Counter.builder(counterName)
-                .description("Nombre de produits créés")
+                .description("Nombre de produits créés dans la catégorie "+ product.getCategory().toString().toLowerCase())
                 .tag("type", "product")
                 .register(meterRegistry)
                 .increment();
@@ -135,16 +144,33 @@ public class ProductService {
         
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "id", id));
+
+                try {
+                        // Si la requête retourne 200 => le produit est utilisé dans au moins une commande
+                        orderServiceWebClient.get().uri(MS_ORDER_BASE_URL+"/product/"+id)
+                                        .retrieve().bodyToMono(String.class).block();
+
+                        // Refuser la suppression si le produit est référencé
+                        throw new ExternalUsageException("Le produit est utilisé dans au moins une commande et ne peut pas être supprimé");
+                } catch (WebClientResponseException.NotFound e) {
+                        // Produit non trouvé dans les commandes => suppression autorisée
+                        productRepository.delete(product);
+
+                        // Métrique personnalisée
+                        String counterName = "products.created."+product.getCategory().toString().toLowerCase();
+                        Counter.builder(counterName)
+                                .register(meterRegistry)
+                                .increment(-1);
+                        
+                        log.info("Produit supprimé avec succès: ID={}, Name={}", id, product.getName());
+                } catch (WebClientRequestException | WebClientResponseException e) {
+                        // Erreur de communication ou erreur serveur côté MS_ORDER
+                        throw new ExternalServiceException("Le service de commandes est indisponible.");
+                }
+
+
         
-        productRepository.delete(product);
         
-        // Métrique personnalisée
-        String counterName = "products.created."+product.getCategory().toString().toLowerCase();
-        Counter.builder(counterName)
-                .register(meterRegistry)
-                .increment(-1);
-        
-        log.info("Produit supprimé avec succès: ID={}, Name={}", id, product.getName());
     }
 
     /**

@@ -16,6 +16,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,6 +73,14 @@ public class OrderService {
     @Scheduled(cron = "0 0 0 * * *")
     public void resetDailyTotal() {
         dailyTotal.reset();
+    }
+
+    /**
+     * Permet d'initialiser ou mettre à jour la valeur du dailyTotal depuis un initialiseur de métriques.
+     */
+    public void setDailyTotal(double value) {
+        dailyTotal.reset();
+        dailyTotal.add(value);
     }
 
     /**
@@ -355,6 +364,21 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Récupère une commande par son ID
+     */
+    public ResponseEntity<?> searchProductPresence(Long id) {
+        log.debug("Vérification de la présence du produit dans les commandes, productId={}", id);
 
+        boolean present = orderItemRepository.existsByProductId(id);
+
+        if (present) {
+            log.info("Produit {} présent dans au moins une commande", id);
+            return ResponseEntity.ok().build();
+        } else {
+            log.info("Produit {} absent des commandes", id);
+            return ResponseEntity.status(404).build();
+        }
+    }
     
 }
