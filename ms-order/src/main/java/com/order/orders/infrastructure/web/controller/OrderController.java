@@ -1,7 +1,6 @@
 package com.order.orders.infrastructure.web.controller;
 
 import com.order.orders.application.dto.*;
-import com.product.products.infrastructure.validation.ValidCategory;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

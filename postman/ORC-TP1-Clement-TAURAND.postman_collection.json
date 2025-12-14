@@ -1,0 +1,759 @@
+{
+	"info": {
+		"_postman_id": "451e4019-529a-4522-98dd-8858152a9d1b",
+		"name": "ORC-TP1-Clement-TAURAND",
+		"description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50721837",
+		"_collection_link": "https://blooskyd-3317318.postman.co/workspace/Cl%C3%A9ment-Taurand's-Workspace~87e66aba-6210-4f67-8db3-d42b5d425d17/collection/50721837-451e4019-529a-4522-98dd-8858152a9d1b?action=share&source=collection_link&creator=50721837"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "getAllProducts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}{{products_api}}",
+							"host": [
+								"{{products_url}}{{products_api}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getOneSpecificProduct",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}{{products_api}}/1",
+							"host": [
+								"{{products_url}}{{products_api}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createProduct",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"name\":\"Lait de vache\",\r\n    \"description\":\"Lait bio stérélisé, vaches élevées en pleine air, région d'origine : loire atlantique\",\r\n    \"price\":1.45,\r\n    \"stock\":10,\r\n    \"category\":\"FOOD\",\r\n    \"imageUrl\":\"\",\r\n    \"active\":true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{products_url}}{{products_api}}",
+							"host": [
+								"{{products_url}}{{products_api}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateProduct",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"name\":\"Lait de vache écrémé\",\r\n    \"description\":\"Lait bio stérélisé, vaches élevées en pleine air, région d'origine : loire atlantique\",\r\n    \"price\":3.453,\r\n    \"stock\":110,\r\n    \"category\":\"FOOD\",\r\n    \"imageUrl\":\"\",\r\n    \"active\":false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{products_url}}{{products_api}}/1",
+							"host": [
+								"{{products_url}}{{products_api}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteProduct",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}{{products_api}}/1",
+							"host": [
+								"{{products_url}}{{products_api}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "searchByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}{{products_api}}/search?name=ho",
+							"host": [
+								"{{products_url}}{{products_api}}"
+							],
+							"path": [
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "ho"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filterByCategory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}{{products_api}}/category/ELECTRONICS",
+							"host": [
+								"{{products_url}}{{products_api}}"
+							],
+							"path": [
+								"category",
+								"ELECTRONICS"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllAvailable",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{products_url}}{{products_api}}/available",
+							"host": [
+								"{{products_url}}{{products_api}}"
+							],
+							"path": [
+								"available"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateStock",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"stockModification\":-10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{products_url}}{{products_api}}/1/stock",
+							"host": [
+								"{{products_url}}{{products_api}}"
+							],
+							"path": [
+								"1",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "getAllUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users_url}}{{users_api}}",
+							"host": [
+								"{{users_url}}{{users_api}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users_url}}{{users_api}}/3",
+							"host": [
+								"{{users_url}}{{users_api}}"
+							],
+							"path": [
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createNewUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"John\",\r\n    \"lastName\":\"Doe\",\r\n    \"email\":\"john.doe@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{users_url}}{{users_api}}",
+							"host": [
+								"{{users_url}}{{users_api}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllActiveUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users}}/active",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"active"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUser",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"Johna\",\r\n    \"lastName\":\"Doea\",\r\n    \"email\":\"johna.doea@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{users_url}}{{users_api}}/11",
+							"host": [
+								"{{users_url}}{{users_api}}"
+							],
+							"path": [
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteUser",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{users_url}}{{users_api}}/11",
+							"host": [
+								"{{users_url}}{{users_api}}"
+							],
+							"path": [
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "searchByLastName",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"John\",\r\n    \"lastName\":\"Doe\",\r\n    \"email\":\"john.doe@example.com\"\r\n}"
+						},
+						"url": {
+							"raw": "{{users_url}}{{users_api}}/search?lastName=re",
+							"host": [
+								"{{users_url}}{{users_api}}"
+							],
+							"path": [
+								"search"
+							],
+							"query": [
+								{
+									"key": "lastName",
+									"value": "re"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getActiveUsers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"John\",\r\n    \"lastName\":\"Doe\",\r\n    \"email\":\"john.doe@example.com\"\r\n}"
+						},
+						"url": {
+							"raw": "{{users_url}}{{users_api}}/active",
+							"host": [
+								"{{users_url}}{{users_api}}"
+							],
+							"path": [
+								"active"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deactivateUser",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"John\",\r\n    \"lastName\":\"Doe\",\r\n    \"email\":\"john.doe@example.com\"\r\n}"
+						},
+						"url": {
+							"raw": "{{users_url}}{{users_api}}/5/deactivate",
+							"host": [
+								"{{users_url}}{{users_api}}"
+							],
+							"path": [
+								"5",
+								"deactivate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "Metrics",
+					"item": [
+						{
+							"name": "Chiffre du jour",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8083/actuator/metrics/commandes.montant.total.jour",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8083",
+									"path": [
+										"actuator",
+										"metrics",
+										"commandes.montant.total.jour"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "getAllOrders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{orders_url}}{{orders_api}}",
+							"host": [
+								"{{orders_url}}{{orders_api}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getOrderDetails",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{orders_url}}{{orders_api}}/11",
+							"host": [
+								"{{orders_url}}{{orders_api}}"
+							],
+							"path": [
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createOrder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"userId\":\"3\",\r\n    \"shippingAddress\":\"71 rue Saint Simon, 94000 Créteil, FR\",\r\n    \"items\": [\r\n        {\r\n            \"productId\":3,\r\n            \"quantity\":2\r\n        },\r\n        {\r\n            \"productId\":1,\r\n            \"quantity\":5\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{orders_url}}{{orders_api}}",
+							"host": [
+								"{{orders_url}}{{orders_api}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "changeOrderStatus",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\":\"CANCELLED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{orders_url}}{{orders_api}}/13/status",
+							"host": [
+								"{{orders_url}}{{orders_api}}"
+							],
+							"path": [
+								"13",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancelOrder",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{orders_url}}{{orders_api}}/1",
+							"host": [
+								"{{orders_url}}{{orders_api}}"
+							],
+							"path": [
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findUserOrder",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{orders_url}}{{orders_api}}/user/3",
+							"host": [
+								"{{orders_url}}{{orders_api}}"
+							],
+							"path": [
+								"user",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "filterOrderByStatus",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{orders_url}}{{orders_api}}/status/PENDING",
+							"host": [
+								"{{orders_url}}{{orders_api}}"
+							],
+							"path": [
+								"status",
+								"PENDING"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "isProductUsed",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{orders_url}}{{orders_api}}/product/11",
+							"host": [
+								"{{orders_url}}{{orders_api}}"
+							],
+							"path": [
+								"product",
+								"11"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Scénarios",
+			"item": [
+				{
+					"name": "Scénario complet",
+					"item": [
+						{
+							"name": "createNewUser",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\":\"John\",\r\n    \"lastName\":\"Doe\",\r\n    \"email\":\"john.doe@example.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{users_url}}{{users_api}}",
+									"host": [
+										"{{users_url}}{{users_api}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "createProduct",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"name\":\"Lait de vache\",\r\n    \"description\":\"Lait bio stérélisé, vaches élevées en pleine air, région d'origine : loire atlantique\",\r\n    \"price\":1.45,\r\n    \"stock\":50,\r\n    \"category\":\"FOOD\",\r\n    \"imageUrl\":\"\",\r\n    \"active\":true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{products_url}}{{products_api}}",
+									"host": [
+										"{{products_url}}{{products_api}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "createOrder",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"userId\":\"12\",\r\n    \"shippingAddress\":\"71 rue Saint Simon, 94000 Créteil, FR\",\r\n    \"items\": [\r\n        {\r\n            \"productId\":3,\r\n            \"quantity\":2\r\n        },\r\n        {\r\n            \"productId\":11,\r\n            \"quantity\":6\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{orders_url}}{{orders_api}}",
+									"host": [
+										"{{orders_url}}{{orders_api}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "changeOrderStatus",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"status\":\"CONFIRMED\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{orders_url}}{{orders_api}}/11/status",
+									"host": [
+										"{{orders_url}}{{orders_api}}"
+									],
+									"path": [
+										"11",
+										"status"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Scénario d'erreur",
+					"item": [
+						{
+							"name": "getUserById KO",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{users_url}}{{users_api}}/30",
+									"host": [
+										"{{users_url}}{{users_api}}"
+									],
+									"path": [
+										"30"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateStock KO",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n    \"stockModification\":-200\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{products_url}}{{products_api}}/1/stock",
+									"host": [
+										"{{products_url}}{{products_api}}"
+									],
+									"path": [
+										"1",
+										"stock"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "changeOrderStatus KO",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"status\":\"CONFIRMED\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{orders_url}}{{orders_api}}/3/status",
+									"host": [
+										"{{orders_url}}{{orders_api}}"
+									],
+									"path": [
+										"3",
+										"status"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

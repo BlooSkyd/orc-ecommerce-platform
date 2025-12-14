@@ -1,0 +1,99 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {},
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "expr": "commandes.montant.total.jour",
+          "interval": "",
+          "legendFormat": "Montant total",
+          "refId": "A"
+        }
+      ],
+      "title": "Montant total des commandes (jour)",
+      "type": "stat"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 2,
+      "options": {},
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "expr": "sum by (status) (rate({__name__=~\"orders\\..+\"}[5m]))",
+          "interval": "",
+          "legendFormat": "{{status}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Taux de commandes par statut (5m)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 3,
+      "options": {},
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "expr": "sum(rate({__name__=~\"orders\\..+\"}[5m]))",
+          "interval": "",
+          "legendFormat": "Total orders rate",
+          "refId": "A"
+        }
+      ],
+      "title": "Taux total de commandes (5m)",
+      "type": "timeseries"
+    }
+  ],
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": ["orders"],
+  "templating": {"list": []},
+  "time": {"from": "now-6h", "to": "now"},
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Commandes - Dashboard",
+  "uid": "orders-dashboard"
+}

@@ -1,0 +1,72 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "gridPos": {"h": 6, "w": 12, "x": 0, "y": 0},
+      "id": 1,
+      "options": {},
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {"expr": "sum by (category) (rate({__name__=~\"products\.created\..+\"}[5m]))", "refId": "A"}
+      ],
+      "title": "Produits créés (par catégorie) - rate 5m",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "gridPos": {"h": 6, "w": 12, "x": 12, "y": 0},
+      "id": 2,
+      "options": {},
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {"expr": "sum(rate(products.updated[5m]))", "refId": "A"}
+      ],
+      "title": "Produits mis à jour - rate 5m",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "gridPos": {"h": 6, "w": 24, "x": 0, "y": 6},
+      "id": 3,
+      "options": {},
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {"expr": "up{job=\"spring-boot-microservices\"}", "refId": "A"}
+      ],
+      "title": "Targets up (spring-boot-microservices)",
+      "type": "timeseries"
+    }
+    ,
+    {
+      "datasource": "Prometheus",
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "gridPos": {"h": 6, "w": 6, "x": 0, "y": 12},
+      "id": 4,
+      "options": {},
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {"expr": "products.low_stock.count", "refId": "A", "legendFormat": "Low stock count"}
+      ],
+      "title": "Produits avec stock bas (<5)",
+      "type": "stat"
+    }
+  ],
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": ["products"],
+  "templating": {"list": []},
+  "time": {"from": "now-6h", "to": "now"},
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Produits - Dashboard",
+  "uid": "products-dashboard"
+}

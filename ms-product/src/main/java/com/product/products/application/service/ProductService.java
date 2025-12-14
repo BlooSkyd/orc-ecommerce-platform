@@ -1,9 +1,7 @@
 package com.product.products.application.service;
 
 import com.product.products.domain.entity.Category;
-import com.product.products.infrastructure.exception.ExternalServiceException;
-import com.product.products.infrastructure.exception.ExternalUsageException;
-import com.product.products.infrastructure.exception.FieldValueException;
+import com.product.products.infrastructure.exception.*;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +14,6 @@ import com.product.products.application.dto.ProductResponseDTO;
 import com.product.products.application.mapper.ProductMapper;
 import com.product.products.domain.entity.Product;
 import com.product.products.domain.repository.ProductRepository;
-import com.product.products.infrastructure.exception.ResourceNotFoundException;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -230,7 +227,7 @@ public class ProductService {
 
         // Vérification des règles métiers
         if (product.getStock()+stock < 0) {
-            throw new FieldValueException("Product","stock", product.getStock()+stock, "le nouveau stock doit être positif ou nul");
+            throw new InsufficientStockException(String.format("Le nouveau stock inféré doit être positif ou nul (%s)", product.getStock()+stock));
         }
 
         int oldStock = product.getStock();
