@@ -185,8 +185,8 @@ public class OrderService {
                 order.addItem(orderItem);
 
                 // 4. Mise à jour des stocks
-                StockUpdateRequestDTO stockUpdateRequestDTO = new StockUpdateRequestDTO();
-                stockUpdateRequestDTO.setStockModification(itemRequestDTO.getQuantity()*-1);
+                StockUpdateRequestDTO stockUpdateRequestDTO = new StockUpdateRequestDTO(itemRequestDTO.getQuantity()*-1);
+
 
                 productServiceWebClient.patch()
                         .uri(MS_PRODUCT_BASE_URL +"/"+itemRequestDTO.getProductId()+"/stock")
@@ -303,6 +303,15 @@ public class OrderService {
                 .register(meterRegistry)
                 .increment(-1);
 
+        // Si la date de création (ie confirmation ou +) de la commande est aujourd'hui,
+        // il faut soustraire au bilan du jour
+        // Rem: le champ orderDate est modifié seulement si la commande change d'état depuis PENDING
+        if (order.getStatus()!=OrderStatus.PENDING && order.getOrderDate().toLocalDate().isEqual(LocalDate.now())) {
+
+            // Maj du métric du montant généré ajd
+            dailyTotal.add(order.getTotalAmount().doubleValue() * -1.0);
+        }
+
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.saveAndFlush(order);
         
@@ -312,14 +321,6 @@ public class OrderService {
                 .register(meterRegistry)
                 .increment();
 
-        // Si la date de création (ie confirmation ou +) de la commande est aujourd'hui,
-        // il faut soustraire au bilan du jour
-        // Rem: le champ orderDate est modifié seulement si la commande change d'état depuis PENDING
-        if (order.getOrderDate().toLocalDate().isEqual(LocalDate.now())) {
-
-            // Maj du métric du montant généré ajd
-            dailyTotal.add(order.getTotalAmount().doubleValue() * -1.0);
-        }
 
         log.info("Commande annulée avec succès: ID={}, Status={}", id, order.getStatus());
     }

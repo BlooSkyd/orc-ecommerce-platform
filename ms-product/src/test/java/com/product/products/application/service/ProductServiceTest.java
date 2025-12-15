@@ -6,6 +6,7 @@ import com.product.products.domain.entity.Category;
 import com.product.products.domain.entity.Product;
 import com.product.products.domain.repository.ProductRepository;
 import com.product.products.infrastructure.exception.FieldValueException;
+import com.product.products.infrastructure.exception.InsufficientStockException;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,8 +52,8 @@ public class ProductServiceTest {
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
         assertThatThrownBy(() -> productService.updateStock(1L, -3))
-                .isInstanceOf(FieldValueException.class)
-                .hasMessageContaining("le nouveau stock doit être positif");
+                .isInstanceOf(InsufficientStockException.class)
+                .hasMessageContaining("Le nouveau stock inféré doit être positif ou nul");
 
         verify(productRepository, times(1)).findById(1L);
         verify(productRepository, never()).save(any());
