@@ -35,12 +35,14 @@ export default function Users(){
       <div className="list">
         <div className="list-header">
           <div className="col">Full name</div>
+          <div className="col">Active</div>
           <div className="col" style={{flex:'0 0 220px'}}>Email</div>
           <div className="col" style={{flex:'0 0 120px',textAlign:'right'}}>Actions</div>
         </div>
         {filtered.map(it=> (
           <div key={it.id} className="row">
             <div className="meta"><strong>{it.firstName} {it.lastName}</strong><div className="small">{it.email}</div></div>
+            <div style={{flex:'0 0 120px'}}>{it.active}</div>
             <div style={{flex:'0 0 220px'}}>{it.email}</div>
             <div style={{flex:'0 0 120px',textAlign:'right'}}>
               <button className="btn" onClick={()=>openEdit(it)}>Edit</button>
